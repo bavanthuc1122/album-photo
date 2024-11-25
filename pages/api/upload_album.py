@@ -9,7 +9,7 @@ import requests
 import uuid
 from datetime import datetime
 import os
-from pathlib import Path
+
 import tempfile
 import zipfile
 from dotenv import load_dotenv
@@ -22,16 +22,20 @@ import re
 from werkzeug.utils import secure_filename
 from concurrent.futures import ThreadPoolExecutor
 import unicodedata
-from lib.database import execute_query
-from pathlib import Path
+
+
 import traceback
-from pages.api.shares import *
+
+import signal
+import logging
+from werkzeug.serving import run_simple
+from pathlib import Path
 
 # Load config from environment variables
 load_dotenv()
 load_dotenv('.env.local')
-root_path = Path(__file__).parent.parent.parent
-sys.path.append(str(root_path))
+
+
 
 
 # Đảm bảo giá trị mặc định khớp với config.js
@@ -39,6 +43,7 @@ LOCAL_STORAGE_PATH = Path(os.getenv('LOCAL_STORAGE_PATH', 'storage/dataclient'))
 print(f"Initialized LOCAL_STORAGE_PATH: {LOCAL_STORAGE_PATH}")
 API_PORT = int(os.getenv('API_PORT', 5002))
 print(f"Starting server on port: {API_PORT}")
+
 
 # Initialize Flask app with config
 app = Flask(__name__)
@@ -535,7 +540,7 @@ def upload_files():
                 'folder_id': folder_id
             }
 
-        # ��ảm bảo thư mục tồn tại
+        # ảm bảo thư mục tồn tại
         for path in paths.values():
             if isinstance(path, Path):
                 path.mkdir(parents=True, exist_ok=True)
@@ -1245,36 +1250,61 @@ try:
 except Exception as e:
     print("Error importing shares:", str(e))
 
+# Cấu hình logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('flask_app.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Xử lý signal để tắt server gracefully
+def signal_handler(sig, frame):
+    logger.info('Shutting down server...')
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+# Error handling middleware
+@app.errorhandler(Exception)
+def handle_exception(e):
+    logger.error(f"Unhandled exception: {str(e)}")
+    logger.error(traceback.format_exc())
+    return jsonify({'error': 'Internal server error'}), 500
+
 if __name__ == '__main__':
-    import logging
-    logging.basicConfig(level=logging.DEBUG)
-    
-    print("Starting Photo Album API...")
     try:
-        print(f"Server will run on: http://0.0.0.0:{API_PORT}")
+        print(f"Starting server on port {API_PORT}...")
         app.run(
             host='0.0.0.0',
             port=API_PORT,
-            debug=True
+            debug=True,
+            use_reloader=True,
+            threaded=True
         )
     except Exception as e:
-        print(f"Error starting server: {e}")
-        import traceback
-        print(traceback.format_exc())
+        print(f"Server error: {str(e)}")
+        sys.exit(1)
 
 # Add static route
 @app.route('/static/<path:filename>')
 def serve_static(filename):
-    # Debug log
-    print(f"Serving static file: {filename}")
-    print(f"Full path: {os.path.join('storage', filename)}")
+    print(f"=== Debug serve_static ===")
+    print(f"Requested file: {filename}")
     
-    try:
-        # Serve từ thư mục storage
-        return send_from_directory('storage', filename)
-    except Exception as e:
-        print(f"Error serving file: {str(e)}")
-        return "File not found", 404
+    # Clean path
+    clean_path = filename.replace('dataclient/dataclient/', 'dataclient/')
+    full_path = LOCAL_STORAGE_PATH / clean_path
+    
+    print(f"Full path: {full_path}")
+    if full_path.exists():
+        return send_file(str(full_path))
+        
+    return "File not found", 404
 
 # Lấy đường dẫn tuyệt đối của project
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -1328,3 +1358,4 @@ def debug_paths():
         'default_icon_storage': str(STORAGE_PATH / 'icon_folder' / 'default_album.png'),
         'default_icon_public': str(PUBLIC_PATH / 'icon_folder' / 'default_album.png')
     }
+

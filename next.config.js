@@ -4,14 +4,14 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'http://localhost:5002/api/:path*'
+        source: '/static/:path*',
+        destination: 'http://localhost:5002/static/:path*'
       },
       {
-        source: '/storage/:path*',
-        destination: '/api/storage/:path*'
+        source: '/dataclient/:path*', 
+        destination: 'http://localhost:5002/static/dataclient/:path*'
       }
-    ];
+    ]
   },
   webpack: (config) => {
     config.cache = false;
