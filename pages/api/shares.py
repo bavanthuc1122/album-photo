@@ -1,6 +1,14 @@
+import sys
+from pathlib import Path
 from flask import request, jsonify
 import secrets
+
+# Thêm root path vào sys.path
+root_path = Path(__file__).parent.parent.parent
+sys.path.append(str(root_path))
+
 from lib.database import execute_query
+from upload_album import app  # Import app từ file upload_album.py
 
 @app.route('/api/shares', methods=['POST'])
 def create_share():
@@ -8,13 +16,25 @@ def create_share():
         data = request.get_json()
         album_id = data.get('albumId')
         username = data.get('username')
-        password = data.get('password')
-        is_public = data.get('isPublic', False)
+        
+        # Debug log
+        print(f"\n=== Debug create_share ===")
+        print(f"1. album_id: {album_id}")
+        print(f"2. username: {username}")
         
         # Kiểm tra album tồn tại
-        album_query = "SELECT id FROM albums WHERE id = %s AND username = %s"
+        album_query = """
+            SELECT id 
+            FROM albums 
+            WHERE id = %s AND username = %s
+        """
+        print(f"3. Query: {album_query}")
+        
         album = execute_query(album_query, (album_id, username))
+        print(f"4. Query result: {album}")
+        
         if not album:
+            print("5. Album not found in database")
             return jsonify({'error': 'Album not found'}), 404
         
         # Tạo share token
@@ -28,8 +48,7 @@ def create_share():
         """
         execute_query(
             query, 
-            (album_id, share_token, username, password, is_public),
-            'photo_albums'  # Chỉ định database
+            (album_id, share_token, username, None, data.get('isPublic', False))
         )
         
         return jsonify({

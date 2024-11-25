@@ -25,6 +25,7 @@ import unicodedata
 from lib.database import execute_query
 from pathlib import Path
 import traceback
+from pages.api.shares import *
 
 # Load config from environment variables
 load_dotenv()
@@ -1221,6 +1222,14 @@ def get_folder_info_by_name():
     except Exception as e:
         print(f"Error getting folder info: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+# Import shares routes
+try:
+    from pages.api.shares import *
+    print("Successfully imported shares routes")
+    print("Available routes:", [str(rule) for rule in app.url_map.iter_rules()])
+except Exception as e:
+    print("Error importing shares:", str(e))
 
 if __name__ == '__main__':
     import logging
