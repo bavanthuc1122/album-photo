@@ -535,7 +535,7 @@ def upload_files():
                 'folder_id': folder_id
             }
 
-        # Đảm bảo thư mục tồn tại
+        # ��ảm bảo thư mục tồn tại
         for path in paths.values():
             if isinstance(path, Path):
                 path.mkdir(parents=True, exist_ok=True)
@@ -937,10 +937,24 @@ def delete_all_trash():
 
 # Thêm route để serve static files
 @app.route('/dataclient/<path:filename>')
-def serve_file(filename):
-    print(f"Requesting file: {filename}")
-    print(f"Full path: {os.path.join(Config.BASE_STORAGE_PATH, filename)}")
-    return send_from_directory(Config.BASE_STORAGE_PATH, filename)
+def serve_user_files(filename):
+    try:
+        print(f"\n=== Debug serve_user_files ===")
+        print(f"1. Requested file: {filename}")
+        
+        file_path = os.path.join(LOCAL_STORAGE_PATH, filename)
+        print(f"2. Full path: {file_path}")
+        
+        if os.path.exists(file_path):
+            print(f"3. File found, serving...")
+            return send_file(file_path)
+            
+        print(f"4. File not found!")
+        return "File not found", 404
+        
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return str(e), 404
 
 # Thêm route để serve preview images
 @app.route('/api/albums/<album_id>/preview/<path:filename>')
@@ -1204,26 +1218,24 @@ def get_album_cover(album_id):
     try:
         username = request.args.get('username')
         if not username:
-            return jsonify({'error': 'Missing username'}), 400
+            return "Missing username", 400
             
-        album_path = LOCAL_STORAGE_PATH / f'user_{username}/data/{album_id}'
+        album_path = os.path.join('storage/dataclient', f'user_{username}/data/{album_id}')
+        print(f"Looking for cover in: {album_path}")
         
-        # Tìm ảnh đầu tiên có đuôi phù hợp
-        image_files = []
-        for ext in ['.jpg', '.jpeg', '.png']:
-            image_files.extend(album_path.glob(f'*{ext}'))
-            image_files.extend(album_path.glob(f'*{ext.upper()}'))
-            
-        if not image_files:
-            return jsonify({'error': 'No images found'}), 404
-            
-        # Lấy ảnh đầu tiên làm cover
-        cover_image = sorted(image_files)[0]
-        return send_file(cover_image, mimetype='image/jpeg')
+        # Tìm ảnh đầu tiên
+        for ext in ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']:
+            files = [f for f in os.listdir(album_path) if f.endswith(ext)]
+            if files:
+                cover_path = os.path.join(album_path, files[0])
+                print(f"Found cover: {cover_path}")
+                return send_file(cover_path)
+                
+        return "No images found", 404
         
     except Exception as e:
         print(f"Error getting cover: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return str(e), 500
 
 # Import shares routes
 try:
@@ -1250,3 +1262,69 @@ if __name__ == '__main__':
         import traceback
         print(traceback.format_exc())
 
+# Add static route
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    # Debug log
+    print(f"Serving static file: {filename}")
+    print(f"Full path: {os.path.join('storage', filename)}")
+    
+    try:
+        # Serve từ thư mục storage
+        return send_from_directory('storage', filename)
+    except Exception as e:
+        print(f"Error serving file: {str(e)}")
+        return "File not found", 404
+
+# Lấy đường dẫn tuyệt đối của project
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+STORAGE_PATH = BASE_DIR / 'storage'
+PUBLIC_PATH = BASE_DIR / 'public'
+
+@app.route('/static/icon_folder/<path:filename>')
+def serve_icon(filename):
+    print(f"=== Debug serve_icon ===")
+    print(f"Requested icon: {filename}")
+    
+    # Thử từ storage trước
+    storage_path = STORAGE_PATH / 'icon_folder' / filename
+    print(f"Looking in storage: {storage_path}")
+    if storage_path.exists():
+        print("Found in storage!")
+        return send_file(str(storage_path))
+        
+    # Fallback về public
+    public_path = PUBLIC_PATH / 'icon_folder' / filename
+    print(f"Looking in public: {public_path}")
+    if public_path.exists():
+        print("Found in public!")
+        return send_file(str(public_path))
+        
+    print("File not found anywhere!")
+    return "Icon not found", 404
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    print(f"=== Debug serve_static ===")
+    print(f"Requested file: {filename}")
+    
+    # Clean path
+    clean_path = filename.replace('dataclient/dataclient/', 'dataclient/')
+    full_path = STORAGE_PATH / clean_path
+    
+    print(f"Full path: {full_path}")
+    if full_path.exists():
+        return send_file(str(full_path))
+        
+    return "File not found", 404
+
+# Thêm route debug để kiểm tra paths
+@app.route('/debug/paths')
+def debug_paths():
+    return {
+        'base_dir': str(BASE_DIR),
+        'storage_path': str(STORAGE_PATH),
+        'public_path': str(PUBLIC_PATH),
+        'default_icon_storage': str(STORAGE_PATH / 'icon_folder' / 'default_album.png'),
+        'default_icon_public': str(PUBLIC_PATH / 'icon_folder' / 'default_album.png')
+    }
