@@ -32,6 +32,7 @@ load_dotenv('.env.local')
 root_path = Path(__file__).parent.parent.parent
 sys.path.append(str(root_path))
 
+
 # Đảm bảo giá trị mặc định khớp với config.js
 LOCAL_STORAGE_PATH = Path(os.getenv('LOCAL_STORAGE_PATH', 'storage/dataclient')).absolute()
 print(f"Initialized LOCAL_STORAGE_PATH: {LOCAL_STORAGE_PATH}")
