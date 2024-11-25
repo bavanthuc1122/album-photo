@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Grid, IconButton, Menu, MenuItem, Box, Typography, CircularProgress, Button } from "@mui/material";
+import { Grid, IconButton, Menu, MenuItem, Box, Typography, CircularProgress, Button, FormControlLabel, Switch, TextField } from "@mui/material";
 import { styled } from '@mui/system';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import CONFIG, { getApiUrl, getImageUrl } from '../lib/config';
 import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
 import { useRouter } from 'next/router';
@@ -127,6 +127,8 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
   const [user, setUser] = useState({});
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [albumRandomStrings, setAlbumRandomStrings] = useState({});
+  const [sharePassword, setSharePassword] = useState('');
+  const [isPublicShare, setIsPublicShare] = useState(true);
 
   useEffect(() => {
     const path = router.asPath;
@@ -386,11 +388,33 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
     }
   };
 
-  const handleShare = (album) => {
+  const handleShare = async (album) => {
     if (!album) return;
-    const shareLink = `${window.location.origin}/albums/${album.randomString}`;
-    setShareUrl(shareLink);
-    setShareDialogOpen(true);
+    
+    try {
+      const response = await fetch('/api/shares', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          albumId: album.id,
+          username: JSON.parse(localStorage.getItem('user')).username,
+          isPublic: isPublicShare,
+          password: !isPublicShare ? sharePassword : null
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setShareUrl(`${window.location.origin}${data.shareUrl}`);
+        setShareDialogOpen(true);
+      }
+    } catch (error) {
+      console.error('Share error:', error);
+      alert('Error creating share link');
+    }
     handleMenuClose();
   };
 
@@ -658,6 +682,28 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
           Chia sẻ album
         </StyledDialogTitle>
         <DialogContent sx={{ px: 3, pb: 3 }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isPublicShare}
+                onChange={(e) => setIsPublicShare(e.target.checked)}
+              />
+            }
+            label="Chia sẻ công khai"
+            sx={{ mb: 2 }}
+          />
+
+          {!isPublicShare && (
+            <TextField
+              fullWidth
+              type="password"
+              label="Mật khẩu truy cập"
+              value={sharePassword}
+              onChange={(e) => setSharePassword(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+          )}
+
           <TextField
             fullWidth
             value={shareUrl}
