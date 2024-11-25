@@ -669,9 +669,6 @@ const AlbumClient = () => {
 
   // Thêm hàm processPhotoUrl
   const processPhotoUrl = (photo) => {
-    if (!photo || !photo.url) {
-      return CONFIG.STORAGE.DEFAULT_COVER;
-    }
     return getImageUrl(photo.url);
   };
 

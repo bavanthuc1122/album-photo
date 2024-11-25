@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"set PYTHONPATH=. && python ./pages/api/upload_album.py\"",
+    "dev": "concurrently \"next dev\" \"npm run dev:backend\"",
     "dev:frontend": "next dev",
-    "dev:backend": "set PYTHONPATH=. && python ./pages/api/upload_album.py",
+    "dev:backend": "cd . && set PYTHONPATH=K:\\New\\Nextjs\\photo-album-next && python pages/api/upload_album.py",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

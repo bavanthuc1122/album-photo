@@ -44,16 +44,9 @@ print(f"Starting server on port: {API_PORT}")
 app = Flask(__name__)
 CORS(app, resources={
     r"/*": {
-        "origins": [
-            "http://localhost:3000",
-            "http://127.0.0.1:3000",
-            "http://localhost:5002",
-            "http://127.0.0.1:5002"
-        ],
+        "origins": ["http://localhost:3000"],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"],
-        "expose_headers": ["Content-Type", "Authorization"],
-        "supports_credentials": True
+        "allow_headers": ["Content-Type", "Authorization"]
     }
 })
 
@@ -944,27 +937,10 @@ def delete_all_trash():
 
 # Thêm route để serve static files
 @app.route('/dataclient/<path:filename>')
-def serve_dataclient(filename):
-    try:
-        print(f"\n=== Debug serve_dataclient ===")
-        print(f"1. Requested filename: {filename}")
-        print(f"2. LOCAL_STORAGE_PATH: {LOCAL_STORAGE_PATH}")
-        
-        full_path = LOCAL_STORAGE_PATH / filename
-        print(f"3. Full file path: {full_path}")
-        print(f"4. File exists: {full_path.exists()}")
-
-        if not full_path.exists():
-            return jsonify({'error': 'File not found'}), 404
-
-        return send_from_directory(
-            str(LOCAL_STORAGE_PATH),
-            filename,
-            mimetype='image/jpeg'
-        )
-    except Exception as e:
-        print(f"[ERROR] serve_dataclient failed: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+def serve_file(filename):
+    print(f"Requesting file: {filename}")
+    print(f"Full path: {os.path.join(Config.BASE_STORAGE_PATH, filename)}")
+    return send_from_directory(Config.BASE_STORAGE_PATH, filename)
 
 # Thêm route để serve preview images
 @app.route('/api/albums/<album_id>/preview/<path:filename>')
@@ -1221,6 +1197,32 @@ def get_folder_info_by_name():
         
     except Exception as e:
         print(f"Error getting folder info: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/albums/<album_id>/cover', methods=['GET'])
+def get_album_cover(album_id):
+    try:
+        username = request.args.get('username')
+        if not username:
+            return jsonify({'error': 'Missing username'}), 400
+            
+        album_path = LOCAL_STORAGE_PATH / f'user_{username}/data/{album_id}'
+        
+        # Tìm ảnh đầu tiên có đuôi phù hợp
+        image_files = []
+        for ext in ['.jpg', '.jpeg', '.png']:
+            image_files.extend(album_path.glob(f'*{ext}'))
+            image_files.extend(album_path.glob(f'*{ext.upper()}'))
+            
+        if not image_files:
+            return jsonify({'error': 'No images found'}), 404
+            
+        # Lấy ảnh đầu tiên làm cover
+        cover_image = sorted(image_files)[0]
+        return send_file(cover_image, mimetype='image/jpeg')
+        
+    except Exception as e:
+        print(f"Error getting cover: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # Import shares routes

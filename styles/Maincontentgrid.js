@@ -3,7 +3,7 @@ import { Grid, IconButton, Menu, MenuItem, Box, Typography, CircularProgress, Bu
 import { styled } from '@mui/system';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import CONFIG, { getApiUrl, getImageUrl } from '../lib/config';
+import CONFIG, { getApiUrl, getImageUrl, getAlbumCoverUrl } from '../lib/config';
 import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import DiamondIcon from '@mui/icons-material/Diamond';
@@ -288,7 +288,7 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
       .toLowerCase()
       .replace(/đ/g, 'd')
       .replace(/[áàảãạâấầẫậăắằẳẵặ]/g, 'a')
-      .replace(/[éèẻẽẹêếềểễệ]/g, 'e')
+      .replace(/[éèẻẽẹêếềể���ệ]/g, 'e')
       .replace(/[íỉĩị]/g, 'i')
       .replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, 'o')
       .replace(/[úùủũụưứừửự]/g, 'u')
