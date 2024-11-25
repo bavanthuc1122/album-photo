@@ -1,0 +1,21 @@
+MindMap - Hệ thống Chia sẻ Files
+
+1.Database (MySQL)
+photo_albums.shares (Bảng đã tạo)
+Lưu thông tin chia sẻ
+Theo dõi lượt xem
+Quản lý thời hạn
+
+
+2.API Endpoints
+pages/api/shares.js
+GET: Lấy thông tin share
+POST: Tạo share mới
+DELETE: Xóa share
+
+
+3. Components
+components/FileSharing/index.js
+UI chia sẻ files
+Quản lý trạng thái
+Copy link chia sẻ

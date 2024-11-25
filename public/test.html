@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Interactions</title>
+</head>
+<body>
+    <h2>Test Results</h2>
+    <div id="results"></div>
+
+    <script>
+        const log = (message) => {
+            const results = document.getElementById('results');
+            results.innerHTML += `<p>${message}</p>`;
+        };
+
+        // Thêm hàm generateVisitorId
+        const generateVisitorId = () => {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 32; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        };
+
+        // Khởi tạo visitorId nếu chưa có
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = generateVisitorId();
+            localStorage.setItem('visitorId', visitorId);
+        }
+
+        // Test 1: Check visitor ID
+        log(`Visitor ID: ${visitorId}`);
+
+        // Test 2: Check interactions
+        const albumName = window.location.pathname.split('/').pop();
+        const interactions = JSON.parse(localStorage.getItem(`interactions_${albumName}`) || '{}');
+        log(`Stored Interactions: ${JSON.stringify(interactions, null, 2)}`);
+
+        // Test 3: API Tests
+        async function runTests() {
+            try {
+                // Test GET
+                const getResponse = await fetch(
+                    `/api/albums/interactions?albumId=test-album&visitorId=${visitorId}`
+                );
+                const getData = await getResponse.json();
+                log(`GET Response: ${JSON.stringify(getData, null, 2)}`);
+
+                // Test POST
+                const postResponse = await fetch('/api/albums/interactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        photoId: 'test-photo-1',
+                        albumId: 'test-album',
+                        visitorId: visitorId,
+                        interactionType: 'heart',
+                        value: true
+                    })
+                });
+                const postData = await postResponse.json();
+                log(`POST Response: ${JSON.stringify(postData, null, 2)}`);
+
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

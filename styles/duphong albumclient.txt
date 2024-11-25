@@ -1,0 +1,651 @@
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  Box, Container, Grid, Typography, IconButton, Menu, MenuItem,
+  Card, CardMedia, CardContent, Dialog, DialogTitle,
+  DialogContent, DialogActions, TextField, Button,
+  Snackbar, Alert, CircularProgress, ImageList, ImageListItem, Skeleton
+} from "@mui/material";
+import { styled } from "@mui/system";
+import { FiHeart, FiDownload, FiMoreVertical, FiSend, FiX } from "react-icons/fi";
+import { useRouter } from 'next/router';
+import CONFIG, { getApiUrl } from '../lib/config';
+import JSZip from 'jszip';
+
+// Styled Components
+const StyledCard = styled(Card)({
+  borderRadius: 0,
+  boxShadow: "none",
+  width: '100%',
+  margin: 0,
+  padding: 0,
+  height: 'auto',
+  overflow: 'auto'
+});
+
+const StyledImage = styled("img")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  borderRadius: 8,
+  transition: "transform 0.3s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.05)"
+  }
+});
+
+const StyledDialog = styled(Dialog)({
+  '& .MuiPaper-root': {
+    borderRadius: '12px',
+    padding: '8px',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+    maxWidth: '400px',
+    width: '90%'
+  }
+});
+
+const StyledDialogTitle = styled(DialogTitle)({
+  textAlign: 'center',
+  fontSize: '1.5rem',
+  fontWeight: 600,
+  color: '#333',
+  padding: '16px 24px'
+});
+
+const StyledTextField = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '8px',
+    '&:hover fieldset': {
+      borderColor: '#000',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#000',
+    }
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: '#000'
+  }
+});
+
+const StyledButton = styled(Button)({
+  textTransform: 'none',
+  padding: '8px 24px',
+  borderRadius: '8px',
+  fontSize: '1rem',
+  fontWeight: 500,
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  '&:hover': {
+    boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+  }
+});
+
+const StyledSkeleton = styled(Skeleton)({
+  borderRadius: 8,
+  transform: 'none',
+});
+
+const LightboxDialog = styled(Dialog)({
+  '& .MuiDialog-paper': {
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
+    margin: 0,
+    maxWidth: 'none',
+    width: '100%',
+    height: '100%'
+  }
+});
+
+const CloseButton = styled(IconButton)({
+  position: 'absolute',
+  right: 16,
+  top: 16,
+  color: '#fff',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+  }
+});
+
+// Utility Functions
+const handleImageError = (e, photoUrl) => {
+  console.error('Image load error:', photoUrl);
+  const newUrl = `${photoUrl}?${new Date().getTime()}`;
+  e.target.src = newUrl;
+};
+
+const processPhotoUrl = (photo) => {
+  if (!photo || !photo.url) {
+    console.log('Invalid photo:', photo);
+    return CONFIG.STORAGE.DEFAULT_COVER;
+  }
+  
+  const finalUrl = getApiUrl(photo.url);
+  console.log('Processing URL:', {
+    original: photo.url,
+    final: finalUrl
+  });
+  
+  return finalUrl;
+};
+
+const AlbumClient = () => {
+  const router = useRouter();
+  const { slug } = router.query;
+
+  // State Management
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [openLightbox, setOpenLightbox] = useState(false);
+  const [scale, setScale] = useState(1);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+  const [comment, setComment] = useState("");
+  const [status, setStatus] = useState("");
+  const [liked, setLiked] = useState([]);
+  const [showLiked, setShowLiked] = useState(false);
+  const [folders, setFolders] = useState([]);
+  const [currentPath, setCurrentPath] = useState('');
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  // Derived State
+  const [albumName, randomString] = useMemo(() => {
+    if (!slug) return ['', ''];
+    const parts = slug.split('-');
+    const random = parts.pop();
+    const name = parts.join('-');
+    return [decodeURIComponent(name), random];
+  }, [slug]);
+
+  const albumId = useMemo(() => {
+    if (!slug) return '';
+    return decodeURIComponent(albumName);
+  }, [slug, albumName]);
+
+  // API Calls
+  const fetchPhotos = useCallback(async (path = '') => {
+    if (!albumId) {
+      console.log('No album ID found');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      console.log('Fetching photos with:', { albumId, user, path });
+      
+      if (!user?.username) {
+        setError('Không tìm thấy thông tin người dùng');
+        return;
+      }
+
+      const url = `${getApiUrl(CONFIG.API.ENDPOINTS.PHOTOS(albumId))}?username=${user.username}&path=${path}`;
+      console.log('Fetching from URL:', url);
+
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log('Photos API Response:', data);
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      if (data.folders && data.photos) {
+        setFolders(data.folders);
+        // Preload images
+        const preloadImages = data.photos.map(photo => {
+          const img = new Image();
+          img.src = processPhotoUrl(photo);
+          return img;
+        });
+        
+        // Set photos after preloading
+        Promise.all(preloadImages.map(img => {
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })).then(() => {
+          setPhotos(data.photos);
+          setLoading(false);
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching photos:', error);
+      setError('Không thể tải ảnh. Vui lòng thử lại.');
+      setLoading(false);
+    }
+  }, [albumId]);
+
+  // Event Handlers
+  const handleImageClick = useCallback((photo) => {
+    setSelectedImage(photo);
+    setOpenLightbox(true);
+  }, []);
+
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  
+  const handleLike = (photoId) => {
+    setLiked(prev => 
+      prev.includes(photoId) ? prev.filter(id => id !== photoId) : [...prev, photoId]
+    );
+  };
+
+  const handleDownloadAlbum = async () => {
+    if (!albumId || liked.length === 0) return;
+    
+    try {
+      setLoading(true);
+      
+      const downloadPromises = liked.map(async (photoId) => {
+        const photo = photos.find(p => p.id === photoId);
+        if (!photo) return null;
+        
+        const response = await fetch(processPhotoUrl(photo));
+        return {
+          name: photo.name,
+          blob: await response.blob()
+        };
+      });
+
+      const downloadedPhotos = await Promise.all(downloadPromises);
+      
+      const zip = new JSZip();
+      downloadedPhotos.forEach(photo => {
+        if (photo) {
+          zip.file(photo.name, photo.blob);
+        }
+      });
+
+      const zipBlob = await zip.generateAsync({type: 'blob'});
+      const url = window.URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `liked_photos_${albumId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      setStatus("Tải xuống thành công");
+    } catch (error) {
+      console.error('Không thể tải xuống lúc này ', error);
+      setStatus("Thất bại vui lòng thử lại!");
+    } finally {
+      setLoading(false);
+      handleMenuClose();
+    }
+  };
+
+  const handleCommentSubmit = () => {
+    setCommentDialogOpen(false);
+    setStatus(`Photo sent with comment: ${comment}`);
+    setComment("");
+  };
+
+  const handleMouseDown = (e) => {
+    if (scale > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging && scale > 1) {
+      const newX = e.clientX - dragStart.x;
+      const newY = e.clientY - dragStart.y;
+      
+      // Limit drag within viewport
+      const maxX = (scale - 1) * window.innerWidth / 2;
+      const maxY = (scale - 1) * window.innerHeight / 2;
+      
+      setPosition({
+        x: Math.max(-maxX, Math.min(maxX, newX)),
+        y: Math.max(-maxY, Math.min(maxY, newY))
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleWheel = useCallback((e) => {
+    e.preventDefault();
+    const delta = e.deltaY * -0.01;
+    setScale(prevScale => {
+      const newScale = Math.max(1, Math.min(prevScale + delta, 4));
+      if (newScale === 1) {
+        setPosition({ x: 0, y: 0 });
+      }
+      return newScale;
+    });
+  }, []);
+
+  const handleCloseLightbox = () => {
+    setOpenLightbox(false);
+    setScale(1);
+  };
+
+  const handleFolderClick = (folder) => {
+    setCurrentPath(prevPath => {
+      const newPath = prevPath ? `${prevPath}/${folder.name}` : folder.name;
+      fetchPhotos(newPath);
+      return newPath;
+    });
+  };
+
+  // Effects
+  useEffect(() => {
+    if (albumId) {
+      console.log('Album ID changed, fetching photos for:', albumId);
+      fetchPhotos();
+    }
+  }, [albumId]);
+
+  // Render Methods
+  const filteredPhotos = showLiked ? photos.filter(photo => liked.includes(photo.id)) : photos;
+
+  const MemoizedImageListItem = React.memo(({ photo, onImageClick }) => (
+    <ImageListItem 
+      onClick={() => onImageClick(photo)}
+      sx={{
+        cursor: 'pointer',
+        overflow: 'hidden',
+        borderRadius: 1,
+        marginBottom: '2px',
+        '&:hover': {
+          transform: 'scale(1.05)',
+          transition: 'transform 0.3s ease-in-out'
+        }
+      }}
+    >
+      <img
+        src={processPhotoUrl(photo)}
+        alt={photo.name}
+        loading="lazy"
+        style={{
+          width: '100%',
+          height: 'auto',
+          display: 'block'
+        }}
+        onError={(e) => handleImageError(e, processPhotoUrl(photo))}
+      />
+    </ImageListItem>
+  ));
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <ImageList 
+          variant="masonry" 
+          gap={2}
+          sx={{
+            width: '100%',
+            margin: '0 !important',
+            opacity: loading ? 0.5 : 1,
+            transition: 'opacity 0.3s ease-in-out',
+            '@media (min-width: 1200px)': {
+              columnCount: '5 !important',
+            },
+            '@media (min-width: 768px) and (max-width: 1199px)': {
+              columnCount: '4 !important',
+              gap: '8px !important',
+            },
+            '@media (max-width: 767px)': {
+              columnCount: '3 !important',
+              gap: '8px !important',
+            }
+          }}
+        >
+          {[...Array(15)].map((_, index) => (
+            <ImageListItem key={`skeleton-${index}`}>
+              <StyledSkeleton
+                variant="rectangular"
+                width="100%"
+                height={Math.floor(Math.random() * (400 - 200) + 200)}
+                animation="wave"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      );
+    }
+
+    return (
+      <ImageList 
+        variant="masonry" 
+        gap={2}
+        sx={{
+          width: '100%',
+          margin: '0 !important',
+          '@media (min-width: 1200px)': {
+            columnCount: '5 !important',
+          },
+          '@media (min-width: 768px) and (max-width: 1199px)': {
+            columnCount: '4 !important',
+            gap: '8px !important',
+          },
+          '@media (max-width: 767px)': {
+            columnCount: '3 !important',
+            gap: '8px !important',
+          }
+        }}
+      >
+        {filteredPhotos.map((photo) => (
+          <MemoizedImageListItem 
+            key={photo.id}
+            photo={photo}
+            onImageClick={handleImageClick}
+          />
+        ))}
+      </ImageList>
+    );
+  };
+
+  return (
+    <Container 
+      maxWidth="xl"
+      sx={{
+        py: 3,
+        height: '100vh',
+        overflow: 'auto'
+      }}
+    >
+      <StyledCard>
+        <Box sx={{ 
+          display: "flex", 
+          justifyContent: "flex-end",
+          p: 2,
+          borderBottom: '1px solid rgba(0,0,0,0.1)'
+        }}>
+          <IconButton
+            aria-label="album options"
+            onClick={handleMenuOpen}
+          >
+            <FiMoreVertical />
+          </IconButton>
+        </Box>
+
+        <Grid 
+          container 
+          spacing={2} 
+          sx={{ 
+            p: 2,
+            maxWidth: '2000px',
+            margin: '0 auto'
+          }}
+        >
+          <Grid item xs={12} sm={4} md={2}>
+            <CardMedia
+              component="img"
+              height="145"
+              image={photos[0] ? processPhotoUrl(photos[0]) : CONFIG.STORAGE.DEFAULT_COVER}
+              alt="Album Cover"
+              sx={{ borderRadius: 2 }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={8}>
+            <CardContent>
+              <Typography variant="h3" component="h1" gutterBottom>
+                {decodeURIComponent(albumName) || 'Album'}
+              </Typography>
+              <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+                <IconButton
+                  aria-label="like album"
+                  onClick={() => setShowLiked(!showLiked)}
+                  sx={{
+                    color: showLiked ? '#ff1744' : 'default',
+                    '&:hover': {
+                      color: '#ff1744'
+                    }
+                  }}
+                >
+                  <FiHeart />
+                </IconButton>
+                
+                {showLiked && (
+                  <IconButton 
+                    aria-label="Tải xuống" 
+                    onClick={handleDownloadAlbum}
+                  >
+                    <FiDownload />
+                  </IconButton>
+                )}
+                
+                <IconButton 
+                  aria-label="send photo" 
+                  onClick={() => setCommentDialogOpen(true)}
+                >
+                  <FiSend />
+                </IconButton>
+              </Box>
+            </CardContent>
+          </Grid>
+        </Grid>
+
+        {renderContent()}
+      </StyledCard>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleDownloadAlbum}>Download Album</MenuItem>
+      </Menu>
+
+      <StyledDialog 
+        open={commentDialogOpen} 
+        onClose={() => setCommentDialogOpen(false)}
+      >
+        <StyledDialogTitle>Gửi ảnh</StyledDialogTitle>
+        <DialogContent sx={{ px: 3, pb: 3 }}>
+          <StyledTextField
+            autoFocus
+            margin="dense"
+            label="Bình luận"
+            fullWidth
+            multiline
+            rows={4}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions sx={{ p: 2, gap: 1 }}>
+          <StyledButton 
+            onClick={() => setCommentDialogOpen(false)}
+            sx={{ 
+              backgroundColor: '#fff',
+              color: '#000',
+              '&:hover': {
+                backgroundColor: '#f5f5f5'
+              }
+            }}
+          >
+            Hủy
+          </StyledButton>
+          <StyledButton 
+            onClick={handleCommentSubmit}
+            sx={{ 
+              backgroundColor: '#fff',
+              color: '#000',
+              '&:hover': {
+                backgroundColor: '#f5f5f5'
+              }
+            }}
+          >
+            Xác nhận
+          </StyledButton>
+        </DialogActions>
+      </StyledDialog>
+
+      <LightboxDialog
+        open={openLightbox}
+        onClose={handleCloseLightbox}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            handleCloseLightbox();
+          }
+        }}
+      >
+        <CloseButton onClick={handleCloseLightbox}>
+          <FiX size={24} />
+        </CloseButton>
+        
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+          }}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {selectedImage && (
+            <img
+              src={processPhotoUrl(selectedImage)}
+              alt={selectedImage.name}
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                objectFit: 'contain',
+                transform: `scale(${scale}) translate(${position.x}px, ${position.y}px)`,
+                transition: isDragging ? 'none' : 'transform 0.2s ease-out',
+                transformOrigin: 'center center',
+                userSelect: 'none',
+                pointerEvents: 'none'
+              }}
+            />
+          )}
+        </Box>
+      </LightboxDialog>
+
+      <Snackbar
+        open={Boolean(status)}
+        autoHideDuration={6000}
+        onClose={() => setStatus("")}
+      >
+        <Alert onClose={() => setStatus("")} severity="success">
+          {status}
+        </Alert>
+      </Snackbar>
+    </Container>
+  );
+};
+
+export default AlbumClient;

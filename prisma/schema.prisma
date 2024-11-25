@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Share {
+  id        Int       @id @default(autoincrement())
+  shareId   String    @unique // ID công khai cho URL
+  username  String    // Người chia sẻ
+  path      String    // Đường dẫn file/folder
+  isPublic  Boolean   @default(true)
+  views     Int       @default(0) // Số lượt xem
+  createdAt DateTime  @default(now())
+  expiresAt DateTime? // Thời hạn chia sẻ (tùy chọn)
+
+  @@unique([username, path]) // Không cho phép chia sẻ trùng
+  @@map("shares")
+} 
