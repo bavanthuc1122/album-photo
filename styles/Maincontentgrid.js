@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Grid, IconButton, Menu, MenuItem, Box, Typography, CircularProgress, Button, FormControlLabel, Switch, TextField } from "@mui/material";
 import { styled } from '@mui/system';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -124,7 +124,7 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
   const [newAlbumName, setNewAlbumName] = useState('');
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [albumRandomStrings, setAlbumRandomStrings] = useState({});
   const [sharePassword, setSharePassword] = useState('');
@@ -139,25 +139,22 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
   }, [router.asPath]);
 
   useEffect(() => {
-    fetchAlbums();
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      setUser(JSON.parse(userStr));
+    }
   }, []);
 
   useEffect(() => {
     if (!searchQuery) {
       setFilteredAlbums(albums);
-      return;
+    } else {
+      const filtered = albums.filter(album => 
+        album.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredAlbums(filtered);
     }
-
-    const filtered = albums.filter(album => 
-      album.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredAlbums(filtered);
   }, [searchQuery, albums]);
-
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    setUser(userData);
-  }, []);
 
   useEffect(() => {
     const handleAlbumsUpdate = () => {
@@ -176,31 +173,34 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
 
   const fetchAlbums = async () => {
     try {
-      setLoading(true);
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
       const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
       
-      const response = await fetch(`${CONFIG.API_URL}/api/albums?username=${user.username}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch albums');
-      }
-      
+      console.log('Fetching albums for:', user.username);
+      const response = await fetch(
+        `${CONFIG.API_URL}/api/albums?username=${user.username}`
+      );
       const data = await response.json();
-      console.log("DEBUG: Albums data received:", data);
-      setAlbums(data);
-      setLoading(false);
+      console.log('Albums response:', data);
+      
+      if (response.ok) {
+        setAlbums(data);
+        console.log('Albums state:', data);
+        
+        if (data.length > 0) {
+          console.log('First album cover URL:', data[0].coverUrl);
+        }
+      }
     } catch (error) {
-      console.error("Error fetching albums:", error);
-      setError(error.message);
-      setLoading(false);
+      console.error('Error fetching albums:', error);
     }
   };
+
+  useEffect(() => {
+    if (user?.username) {
+      fetchAlbums();
+    }
+  }, [user]);
 
   const handleMenuClick = (event, album) => {
     event.stopPropagation();
@@ -288,7 +288,7 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
       .toLowerCase()
       .replace(/đ/g, 'd')
       .replace(/[áàảãạâấầẫậăắằẳẵặ]/g, 'a')
-      .replace(/[éèẻẽẹêếềể���ệ]/g, 'e')
+      .replace(/[éèẻẽẹêếềểệ]/g, 'e')
       .replace(/[íỉĩị]/g, 'i')
       .replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, 'o')
       .replace(/[úùủũụưứừửự]/g, 'u')
@@ -480,6 +480,19 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
     }
   }, [albumRandomStrings]);
 
+  const getCoverUrl = (album) => {
+    return `${CONFIG.API_URL}${album.coverUrl}`;
+  };
+
+  const getImageUrl = (coverUrl) => {
+    if (!coverUrl) return DEFAULT_COVER;
+    return `${CONFIG.API_URL}${coverUrl}`;
+  };
+
+  useEffect(() => {
+    console.log("Albums state after update:", albums);
+  }, [albums]);
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
@@ -536,6 +549,7 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
           sm: 2    // Giữ nguyên spacing ở desktop
         }}
       >
+        {console.log('Rendering albums:', filteredAlbums)}
         {filteredAlbums.map((album) => (
           <Grid 
             item 
@@ -548,17 +562,11 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
             <AlbumCard>
               <ImageWrapper onClick={() => handleAlbumClick(album)}>
                 <StyledImage
-                  src={album.coverUrl ? getImageUrl(album.coverUrl) : DEFAULT_COVER}
+                  src={getImageUrl(album.coverUrl)}
                   alt={album.name}
-                  loading="lazy"
                   onError={(e) => {
+                    console.log('Image load error for:', album.name);
                     e.target.src = DEFAULT_COVER;
-                    console.log('Image error for album:', album.name);
-                  }}
-                  sx={{
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '100%'
                   }}
                 />
               </ImageWrapper>
@@ -575,7 +583,7 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
                   display: 'flex',
                   flexDirection: 'column',  // Hiển thị theo chiều dọc
                   alignItems: 'flex-end',   // Căn phải
-                  gap: 0.5,                 // Khoảng cách giữa photos và date
+                  gap: 0.5,                 // Khoảng cách giữa photos và date                 // Khoảng cách giữa photos và date
                   color: 'text.secondary', 
                   mt: 1                     // Giữ nguyên khoảng cách với tên album
                 }}>

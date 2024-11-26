@@ -120,6 +120,11 @@ const AlbumClient = () => {
     return [decodeURIComponent(name), random];
   }, [slug]);
 
+  // currentPath sẽ là: data/albumName
+  const currentPath = useMemo(() => {
+    return albumName ? `data/${albumName}` : '';
+  }, [albumName]);
+
   // API Calls
   const fetchPhotos = useCallback(async (path = '') => {
     try {
@@ -669,7 +674,7 @@ const AlbumClient = () => {
 
   // Thêm hàm processPhotoUrl
   const processPhotoUrl = (photo) => {
-    return getImageUrl(photo.url);
+    return `${CONFIG.API_URL}/static/dataclient/user_${user.username}/data/${currentPath}/${photo.name}`;
   };
 
   // 1. Đưa syncLikedFromInteractions ra khỏi useCallback
