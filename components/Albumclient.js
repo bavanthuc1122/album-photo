@@ -98,7 +98,7 @@ const AlbumClient = () => {
   const [liked, setLiked] = useState([]);
   const [showLiked, setShowLiked] = useState(false);
   const [folders, setFolders] = useState([]);
-  const [currentPath, setCurrentPath] = useState('');
+  // const [currentPath, setCurrentPath] = useState('');
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -655,9 +655,9 @@ const AlbumClient = () => {
 // đã tách
 
   const renderContent = () => {
-    if (loading) {
-      return <CircularProgress />;
-    }
+    // if (loading) {
+    //   return <CircularProgress />;
+    // }
 
     return (
       <VirtualizedGallery
