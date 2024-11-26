@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { FiHeart, FiDownload, FiMoreVertical, FiSend, FiX, FiShare2, FiCopy, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useRouter } from 'next/router';
-import CONFIG from '../lib/config';
+import CONFIG, { getAlbumCoverUrl, getPhotoUrl } from '../lib/config';
 import JSZip from 'jszip';
 import VirtualizedGallery from '../components/VirtualizedGallery';
 import MemoizedImageListItem from '../components/MemoizedImageListItem';
@@ -80,10 +80,35 @@ const generateVisitorId = () => {
   return result;
 };
 
+// Đổi tên function để tránh conflict
+const processImageUrl = (photo, username, albumName) => {
+  if (!photo?.path) {
+    console.log('Missing photo path');
+    return CONFIG.STORAGE.DEFAULT_COVER;
+  }
+
+  if (!username || !albumName) {
+    console.log('Missing username or album name:', { username, albumName });
+    return CONFIG.STORAGE.DEFAULT_COVER;
+  }
+
+  try {
+    const url = `${CONFIG.API_URL}/dataclient/user_${username}/data/${albumName}/${photo.path}`;
+    console.log('Photo URL:', url);
+    return url;
+  } catch (error) {
+    console.error('Error generating URL:', error);
+    return CONFIG.STORAGE.DEFAULT_COVER;
+  }
+};
+
 const AlbumClient = () => {
   const router = useRouter();
   const { slug } = router.query;
 
+  // Thêm user state
+  const [user, setUser] = useState(null);
+  
   // State Management
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,10 +135,14 @@ const AlbumClient = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(null);
   const [interactions, setInteractions] = useState({});
   const [visitorId, setVisitorId] = useState(null);
+<<<<<<< HEAD
   const [user, setUser] = useState(null);
+=======
+  const [initialized, setInitialized] = useState(false);
+>>>>>>> d9dc322e7dd5c6f75b65786234d2ae7f64044279
 
   // Derived State
-  const [albumName, randomString] = useMemo(() => {
+  const [currentAlbumName, randomString] = useMemo(() => {
     if (!slug) return ['', ''];
     const parts = slug.split('-');
     const random = parts.pop();
@@ -123,46 +152,52 @@ const AlbumClient = () => {
 
   // currentPath sẽ là: data/albumName
   const currentPath = useMemo(() => {
-    return albumName ? `data/${albumName}` : '';
-  }, [albumName]);
+    return currentAlbumName ? `data/${currentAlbumName}` : '';
+  }, [currentAlbumName]);
 
   // API Calls
   const fetchPhotos = useCallback(async (path = '') => {
-    try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (!user || !user.username) {
-        console.error('Missing user data:', user);
-        return;
-      }
+    if (!initialized || !user?.username || !currentAlbumName) {
+      console.log('Skipping fetch, missing data:', { initialized, user, currentAlbumName });
+      return;
+    }
 
+    try {
       setLoading(true);
+      console.log('=== Starting photo fetch ===');
+
+      // Tạo đường dẫn đúng
+      const fullPath = path || `data/${currentAlbumName}`;
+      
       console.log('Fetching photos:', {
-        url: `${CONFIG.API_URL}/api/albums/${albumName}/photos`,
+        url: `${CONFIG.API_URL}/api/albums/${currentAlbumName}/photos`,
         username: user.username,
-        path: path
+        path: fullPath
       });
 
       const response = await fetch(
-        `${CONFIG.API_URL}/api/albums/${albumName}/photos?username=${user.username}&path=${path}`
+        `${CONFIG.API_URL}/api/albums/${currentAlbumName}/photos?username=${user.username}&path=${fullPath}`
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch photos');
+        throw new Error(`Failed to fetch photos: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Fetched data:', data);
+      console.log('✓ Fetched data:', data);
       
       setPhotos(data.photos || []);
       setFolders(data.folders || []);
       setMetadata(data.metadata || null);
+      console.log('=== Photo fetch complete ===');
+
     } catch (error) {
-      console.error('Error fetching photos:', error);
+      console.error('❌ Error fetching photos:', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
-  }, [albumName]);
+  }, [initialized, user, currentAlbumName]);
 
   // Event Handlers
   const handleImageClick = useCallback((photo) => {
@@ -179,7 +214,7 @@ const AlbumClient = () => {
   
   const handleLike = async (photoId) => {
     try {
-      if (!visitorId || !albumName) {
+      if (!visitorId || !currentAlbumName) {
         console.error('Missing visitorId or albumName');
         return;
       }
@@ -199,7 +234,7 @@ const AlbumClient = () => {
       syncLikedFromInteractions(newInteractions);
       
       localStorage.setItem(
-        `interactions_${albumName}`,
+        `interactions_${currentAlbumName}`,
         JSON.stringify(newInteractions)
       );
 
@@ -209,7 +244,7 @@ const AlbumClient = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           photoId,
-          albumId: albumName,
+          albumId: currentAlbumName,
           visitorId,
           interactionType: 'heart',
           value: newValue
@@ -249,7 +284,7 @@ const AlbumClient = () => {
       const zip = new JSZip();
       setStatus("Đang chuẩn bị tải xuống...");
 
-      // Sử dụng title từ metadata hoặc fallback
+      // S dụng title từ metadata hoặc fallback
       const albumTitle = metadata?.title || "album";
       const folder = zip.folder(albumTitle);
 
@@ -318,7 +353,7 @@ const AlbumClient = () => {
       // Tạo folder trong ZIP
       const folder = zip.folder("liked_photos");
 
-      // Download từng ảnh đã like và thêm vào ZIP
+      // Download từng nh đã like và thêm vào ZIP
       for (const image of likedImages) {
         const downloadUrl = `${CONFIG.DOWNLOAD_API_URL}/api/download`;
         const downloadResponse = await fetch(downloadUrl, {
@@ -478,7 +513,7 @@ const AlbumClient = () => {
       const dateStr = today.toLocaleDateString('vi-VN');
 
       // Tạo text output
-      const codeText = `📸 Album: ${decodeURIComponent(albumName)}
+      const codeText = `📸 Album: ${decodeURIComponent(currentAlbumName)}
 ❤️ Ảnh yêu thích: ${likedImages.length} ảnh
 🔢 Mã số: ${likedImages.map(img => img.id).join(', ')}
 📅 Ngày tạo: ${dateStr}`;
@@ -507,7 +542,7 @@ const AlbumClient = () => {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: `Album ${albumName}`,
+          title: `Album ${currentAlbumName}`,
           text: generatedCode
         });
       } else {
@@ -551,105 +586,80 @@ const AlbumClient = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [openLightbox, handleNavigate]);
 
-  // Effects
+  // Load initial data một lần duy nhất
   useEffect(() => {
-    console.log('AlbumClient mounted, albumId:', albumId);
-    console.log('User:', JSON.parse(localStorage.getItem('user') || '{}'));
-    
-    if (albumId) {
-      console.log('Fetching photos for album:', albumId);
-      fetchPhotos();
-    }
-  }, [albumId, fetchPhotos]);
-
-  useEffect(() => {
-    if (router.query.slug) {
-      setUrlSlug(router.query.slug);
-    }
-  }, [router.query.slug]);
-
-  useEffect(() => {
-    if (albumName) {
-      fetchPhotos();
-    }
-  }, [albumName, fetchPhotos]);
-
-  // Sửa lại useEffect để khởi tạo visitorId
-  useEffect(() => {
-    // Lấy visitorId từ localStorage
-    let visitor = localStorage.getItem('visitorId');
-    
-    // Nếu chưa có thì tạo mới
-    if (!visitor) {
-      visitor = generateVisitorId();
-      localStorage.setItem('visitorId', visitor);
-    }
-    
-    // Set vào state
-    setVisitorId(visitor);
-
-    // Log để debug
-    console.log('Visitor ID initialized:', visitor);
-  }, []); // Chỉ chạy 1 lần khi component mount
-
-  // Thêm useEffect để load interactions
-  useEffect(() => {
-    const loadInteractions = async () => {
-      if (!visitorId || !albumName) return;
-
+    const initialize = async () => {
       try {
-        // Load từ localStorage first
-        const savedInteractions = localStorage.getItem(`interactions_${albumName}`);
-        if (savedInteractions) {
-          const parsedInteractions = JSON.parse(savedInteractions);
-          setInteractions(parsedInteractions);
-          syncLikedFromInteractions(parsedInteractions);
-        }
+        setLoading(true);
+        console.log('Initializing AlbumClient...');
 
-        // Then fetch from server
-        const response = await fetch(
-          `${CONFIG.API_URL}/api/albums/interactions?` + 
-          `albumId=${albumName}&visitorId=${visitorId}`
-        );
-        const data = await response.json();
-        
-        const mergedInteractions = {
-          ...JSON.parse(savedInteractions || '{}'),
-          ...data.interactions
-        };
-        
-        setInteractions(mergedInteractions);
-        syncLikedFromInteractions(mergedInteractions);
-        
-        localStorage.setItem(
-          `interactions_${albumName}`,
-          JSON.stringify(mergedInteractions)
-        );
+        // 1. Load user
+        const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        setUser(userInfo);
+        console.log('User loaded:', userInfo);
+
+        // 2. Load visitorId
+        let visitor = localStorage.getItem('visitorId');
+        if (!visitor) {
+          visitor = generateVisitorId();
+          localStorage.setItem('visitorId', visitor);
+        }
+        setVisitorId(visitor);
+        console.log('VisitorId loaded:', visitor);
+
+        setInitialized(true);
       } catch (error) {
-        console.error('Error loading interactions:', error);
+        console.error('Initialization error:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadInteractions();
-  }, [albumName, visitorId]);
+    initialize();
+  }, []); // Run once on mount
 
-  // Thêm vào AlbumClient.js
-  const testInteractions = async () => {
-    if (process.env.NODE_ENV !== 'development') return;
-    
-    console.group('Testing Interactions');
-    console.log('Visitor ID:', visitorId);
-    console.log('Current Interactions:', interactions);
-    console.log('Album Name:', albumName);
-    console.groupEnd();
+  // Fetch photos only after initialization and when albumName changes
+  useEffect(() => {
+    if (initialized && user?.username && currentAlbumName) {
+      console.log('Fetching photos for:', {
+        username: user.username,
+        albumName: currentAlbumName,
+        initialized
+      });
+      fetchPhotos();
+    }
+  }, [initialized, user, currentAlbumName, fetchPhotos]);
+
+  // Test interactions only after initialization
+  useEffect(() => {
+    if (initialized && visitorId && currentAlbumName) {
+      console.group('Testing Interactions');
+      console.log('Visitor ID:', visitorId);
+      console.log('Current Interactions:', interactions);
+      console.log('Album Name:', currentAlbumName);
+      console.groupEnd();
+    }
+  }, [initialized, visitorId, interactions, currentAlbumName]);
+
+  // Early return if not initialized
+  if (!initialized || loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Sử dụng function thường thay vì useCallback
+  const processPhotoUrl = (photo) => {
+    return getPhotoUrl(photo, user?.username, currentAlbumName);
   };
 
-  // Thêm vào useEffect
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      testInteractions();
-    }
-  }, [visitorId, interactions, albumName]);
+  // Render với loading state
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   // Thêm useEffect để load user info
   useEffect(() => {
@@ -670,8 +680,11 @@ const AlbumClient = () => {
       <VirtualizedGallery
         photos={filteredPhotos}
         onImageClick={handleImageClick}
-        processPhotoUrl={processPhotoUrl}
-        handleImageError={handleImageError}
+        processPhotoUrl={(photo) => getPhotoUrl(albumId, user?.username)}
+        handleImageError={(e) => {
+          console.error('Error loading gallery image:', e);
+          e.target.src = CONFIG.STORAGE.DEFAULT_COVER;
+        }}
         liked={liked}
         interactions={interactions}
         onLikeClick={handleLike}
@@ -679,6 +692,7 @@ const AlbumClient = () => {
     );
   };
 
+<<<<<<< HEAD
   // Sửa lại hàm processPhotoUrl
   const processPhotoUrl = (photo) => {
     if (!user?.username) return CONFIG.STORAGE.DEFAULT_COVER;
@@ -686,11 +700,22 @@ const AlbumClient = () => {
   };
 
   // 1. Đưa syncLikedFromInteractions ra khỏi useCallback
+=======
+  // Thêm hàm syncLikedFromInteractions
+>>>>>>> d9dc322e7dd5c6f75b65786234d2ae7f64044279
   const syncLikedFromInteractions = (interactionsData) => {
-    const likedPhotos = Object.entries(interactionsData)
-      .filter(([_, interaction]) => interaction.heart === true)
-      .map(([photoId]) => photoId);
-    setLiked(likedPhotos);
+    try {
+      // Lọc ra các photo IDs có heart = true
+      const likedPhotoIds = Object.entries(interactionsData)
+        .filter(([_, interaction]) => interaction.heart)
+        .map(([photoId]) => photoId);
+      
+      setLiked(likedPhotoIds);
+      
+      console.log('Synced liked photos:', likedPhotoIds);
+    } catch (error) {
+      console.error('Error syncing liked photos:', error);
+    }
   };
 
   return (
@@ -736,15 +761,19 @@ const AlbumClient = () => {
             <CardMedia
               component="img"
               height="145"
-              image={photos[0] ? processPhotoUrl(photos[0]) : CONFIG.STORAGE.DEFAULT_COVER}
+              image={user?.username ? processPhotoUrl(albumId, user.username) : CONFIG.STORAGE.DEFAULT_COVER}
               alt="Album Cover"
               sx={{ borderRadius: 2 }}
+              onError={(e) => {
+                console.error('Error loading image:', e);
+                e.target.src = CONFIG.STORAGE.DEFAULT_COVER;
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={8}>
             <CardContent>
               <Typography variant="h3" component="h1" gutterBottom>
-                {decodeURIComponent(albumName) || 'Album'}
+                {decodeURIComponent(currentAlbumName) || 'Album'}
               </Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -1001,5 +1030,9 @@ const AlbumClient = () => {
     </Container>
   );
 };
+
+
+
+
 
 export default AlbumClient;

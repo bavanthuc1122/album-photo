@@ -10,7 +10,7 @@ import requests
 import uuid
 from datetime import datetime
 import os
-
+from pathlib import Path
 import tempfile
 import zipfile
 from dotenv import load_dotenv
@@ -23,8 +23,6 @@ import re
 from werkzeug.utils import secure_filename
 from concurrent.futures import ThreadPoolExecutor
 import unicodedata
-
-
 import traceback
 
 import signal
@@ -41,8 +39,9 @@ load_dotenv('.env.local')
 import time  # Thiếu import cho process_image()
 from flask import Response # Thiếu import cho streaming response
 
-
-
+root_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(root_dir))
+from lib.database import execute_query
 # Đảm bảo giá trị mặc định khớp với config.js
 LOCAL_STORAGE_PATH = Path(os.getenv('LOCAL_STORAGE_PATH', 'storage/dataclient')).absolute()
 print(f"Initialized LOCAL_STORAGE_PATH: {LOCAL_STORAGE_PATH}")
@@ -226,7 +225,7 @@ def normalize_filename(filename):
             # Giữ nguyên các phần khác (năm/tháng/ngày)
             normalized_parts.append(part)
     
-    # Nối lại các phần bằng dấu /
+    # N��i lại các phần bằng dấu /
     return '/'.join(normalized_parts)
 
 @app.route('/api/albums', methods=['POST'])
@@ -284,26 +283,36 @@ def serve_album_image(filename):
 def get_albums():
     try:
         username = request.args.get('username')
-        print(f"\n=== Debug get_albums ===")
-        print(f"1. Username: {username}")
-        
         user_data_path = LOCAL_STORAGE_PATH / f'user_{username}/data'
-        print(f"2. User data path: {user_data_path}")
         
         albums = []
         for album_path in user_data_path.iterdir():
             if album_path.is_dir():
                 try:
+<<<<<<< HEAD
                     # Sử dụng logic từ get_album_cover
+=======
+                    # Tìm tất cả ảnh trong album
+>>>>>>> d9dc322e7dd5c6f75b65786234d2ae7f64044279
                     all_images = []
                     for ext in ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']:
                         all_images.extend(list(album_path.glob(f'*{ext}')))
                     
+<<<<<<< HEAD
                     cover_url = None
                     if all_images:
                         cover_image = random.choice(all_images)
                         cover_url = f"/static/dataclient/user_{username}/data/{album_path.name}/{cover_image.name}"
                     
+=======
+                    # Chọn ngẫu nhiên 1 ảnh làm ảnh bìa
+                    cover_url = None
+                    if all_images:
+                        cover_image = random.choice(all_images)
+                        cover_url = f"/api/storage/dataclient/user_{username}/data/{album_path.name}/{cover_image.name}"
+                    
+                    # Tạo thông tin album
+>>>>>>> d9dc322e7dd5c6f75b65786234d2ae7f64044279
                     album_info = {
                         'id': album_path.name,
                         'name': album_path.name,
@@ -771,24 +780,6 @@ def debug_album(album_id):
         'files': [str(p) for p in album_path.glob('*') if p.is_file()]
     }
 
-@app.route('/debug/static')
-def debug_static():
-    try:
-        test_image = "user_admin4/data/A/B.jpg"
-        image_path = LOCAL_STORAGE_PATH / test_image
-        
-        return {
-            'LOCAL_STORAGE_PATH': str(LOCAL_STORAGE_PATH),
-            'test_image_path': str(image_path),
-            'exists': image_path.exists(),
-            'is_file': image_path.is_file() if image_path.exists() else False,
-            'parent_exists': image_path.parent.exists(),
-            'parent_is_dir': image_path.parent.is_dir() if image_path.parent.exists() else False,
-            'files_in_folder': [str(f) for f in image_path.parent.glob('*')] if image_path.parent.exists() else []
-        }
-    except Exception as e:
-        return {'error': str(e)}
-
 @app.route('/api/albums/upload-links', methods=['POST'])
 def upload_multiple_links():
     try:
@@ -982,36 +973,26 @@ def serve_static_files(filename):
                     images = list(dir_path.glob(f'*{ext}'))
                     if images:
                         print(f"6. Found alternative image: {images[0]}")
-                        return send_file(str(images[0]), mimetype='image/jpeg')
+                        return send_file(str(images[0]))
             
             print("7. No images found in directory")
-            return "File not found", 404
+            return jsonify({
+                'error': 'File not found',
+                'path': str(full_path)
+            }), 404
             
-        return send_file(str(full_path), mimetype='image/jpeg')
+        return send_file(str(full_path))
         
     except Exception as e:
         print(f"Error in serve_static_files: {str(e)}")
-        traceback.print_exc()  # Print full traceback
-        return jsonify({"error": str(e)}), 500
+        traceback.print_exc()
+        return jsonify({
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
 
 # Route cho dataclient
-@app.route('/dataclient/<path:filename>')
-def serve_user_files(filename):
-    try:
-        print(f"\n=== Debug serve_user_files ===")
-        print(f"1. Requested file: {filename}")
-        file_path = os.path.join(LOCAL_STORAGE_PATH, filename)
-        print(f"2. Full path: {file_path}")
-        if os.path.exists(file_path):
-            print(f"3. File found, serving...")
-            return send_file(file_path)
-        print(f"4. File not found!")
-        return "File not found", 404
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return str(e), 404
 
-# Route cho preview images
 @app.route('/api/albums/<album_id>/preview/<path:filename>')
 def serve_preview_files(filename):
     try:
@@ -1114,7 +1095,7 @@ def update_all_metadata():
 
                             album_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=9))
 
-                            # Chuẩn hóa path ngay khi tìm ảnh
+                            # Chuẩn h��a path ngay khi tìm ảnh
                             images = []
                             for img_file in day_dir.glob('*'):
                                 if img_file.is_file() and img_file.suffix.lower() in ['.jpg', '.jpeg', '.png', '.gif']:
@@ -1229,8 +1210,9 @@ def save_file_info():
         folder_id = data.get('folderId')
         filename = data.get('filename')
 
+        # Sửa từ files thành images
         execute_query("""
-            INSERT INTO files (folder_id, file_name, uploaded_at)
+            INSERT INTO images (folder_id, file_name, uploaded_at)
             VALUES (%s, %s, NOW())
         """, (folder_id, filename))
 
@@ -1397,13 +1379,98 @@ def serve_static(filename):
     return "File not found", 404
 
 # Thêm route debug để kiểm tra paths
-@app.route('/debug/paths')
-def debug_paths():
-    return {
-        'base_dir': str(BASE_DIR),
-        'storage_path': str(STORAGE_PATH),
-        'public_path': str(PUBLIC_PATH),
-        'default_icon_storage': str(STORAGE_PATH / 'icon_folder' / 'default_album.png'),
-        'default_icon_public': str(PUBLIC_PATH / 'icon_folder' / 'default_album.png')
-    }
+
+
+@app.route('/storage/<path:filename>')
+def serve_storage(filename):
+    try:
+        # Log chi tiết để debug
+        print("\n=== Debug serve_storage ===")
+        print(f"1. Requested filename: {filename}")
+        
+        # Decode URL-encoded characters (ví dụ: %C3%A1ch -> ách)
+        decoded_filename = urllib.parse.unquote(filename)
+        print(f"2. Decoded filename: {decoded_filename}")
+        
+        # Đường dẫn đầy đủ
+        full_path = os.path.join(LOCAL_STORAGE_PATH, decoded_filename)
+        print(f"3. Full path: {full_path}")
+        print(f"4. Path exists: {os.path.exists(full_path)}")
+        
+        # List files in parent directory để debug
+        parent_dir = os.path.dirname(full_path)
+        if os.path.exists(parent_dir):
+            print(f"5. Files in parent directory:")
+            for f in os.listdir(parent_dir):
+                print(f"   - {f}")
+        else:
+            print(f"5. Parent directory does not exist: {parent_dir}")
+
+        if os.path.exists(full_path):
+            print("6. Serving file...")
+            return send_file(full_path)
+            
+        print("7. File not found!")
+        return jsonify({
+            "error": "File not found",
+            "details": {
+                "requested_path": full_path,
+                "exists": os.path.exists(full_path),
+                "parent_exists": os.path.exists(parent_dir)
+            }
+        }), 404
+        
+    except Exception as e:
+        print(f"Error serving file: {str(e)}")
+        traceback.print_exc()  # Print full traceback
+        return jsonify({
+            "error": "Server error",
+            "message": str(e),
+            "path": full_path if 'full_path' in locals() else None
+        }), 500
+
+# Route cho static files từ storage
+@app.route('/storage/dataclient/<path:filename>')
+def serve_dataclient(filename):
+    try:
+        print("\n=== Debug serve_dataclient ===")
+        print(f"1. Requested file: {filename}")
+        
+        # Decode URL-encoded characters
+        decoded_path = urllib.parse.unquote(filename)
+        print(f"2. Decoded path: {decoded_path}")
+        
+        # Construct full path
+        full_path = LOCAL_STORAGE_PATH / 'dataclient' / decoded_path
+        print(f"3. Full path: {full_path}")
+        print(f"4. File exists: {full_path.exists()}")
+        
+        # Check parent directory
+        parent_dir = full_path.parent
+        if parent_dir.exists():
+            print("5. Files in directory:")
+            for f in parent_dir.glob('*'):
+                print(f"   - {f.name}")
+        else:
+            print(f"5. Directory not found: {parent_dir}")
+            
+        if full_path.exists():
+            print("6. Serving file...")
+            return send_file(str(full_path))
+            
+        return jsonify({
+            'error': 'File not found',
+            'path': str(full_path),
+            'exists': full_path.exists(),
+            'parent_exists': parent_dir.exists()
+        }), 404
+        
+    except Exception as e:
+        print(f"Error in serve_dataclient: {str(e)}")
+        traceback.print_exc()
+        return jsonify({
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
+
 

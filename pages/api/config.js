@@ -1,5 +1,9 @@
 const CONFIG = {
+<<<<<<< HEAD
   API_URL: process.env.PYTHON_API_URL || 'http://localhost:3000',
+=======
+  API_URL: process.env.PYTHON_API_URL || 'http://localhost:3000,
+>>>>>>> d9dc322e7dd5c6f75b65786234d2ae7f64044279
   DOWNLOAD_API_URL: 'http://localhost:5003',
   STORAGE: {
     DEFAULT_COVER: '../icon_folder/1.png',
