@@ -178,7 +178,12 @@ const PhotoGrid = ({ searchQuery, sidebarOpen }) => {
       
       console.log('Fetching albums for:', user.username);
       const response = await fetch(
-        `${CONFIG.API_URL}/api/albums?username=${user.username}`
+        `${CONFIG.API_URL}/api/albums?username=${user.username}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       const data = await response.json();
       console.log('Albums response:', data);

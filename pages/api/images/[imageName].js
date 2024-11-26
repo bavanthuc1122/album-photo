@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req, res) {
   const { imageName } = req.query;
 
-  // Đường dẫn đến thư mục chứa hình ảnh (ví dụ: nằm trong project nhưng ngoài public)
-  const imagePath = path.join(process.cwd(), 'private_images', imageName as string);
+
+  const imagePath = path.join(process.cwd(), 'storage/', imageName );
 
   // Kiểm tra xem file có tồn tại không
   if (fs.existsSync(imagePath)) {
