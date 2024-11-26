@@ -27,5 +27,8 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/albums/:path*']
+  matcher: [
+    '/api/albums/:path*',
+    '/albums/:path*'
+  ]
 };

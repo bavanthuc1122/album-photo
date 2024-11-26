@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, useMediaQuery } from "@mui/material";
 import Sidebar from './Sidebar';
-import MainContentGrid from '../styles/Maincontentgrid';
+import MainContentGrid from '../components/Maincontentgrid';
 import { StyledMainContent } from '../styles/AppStyles';
 import { StyledHeader } from '../styles/AppStyles';
 

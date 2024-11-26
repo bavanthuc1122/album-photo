@@ -43,9 +43,31 @@ const VirtualizedGallery = ({
 }) => {
   const [visiblePhotos, setVisiblePhotos] = React.useState([]);
   const [page, setPage] = React.useState(0);
+  const [columns, setColumns] = React.useState(3);
   const containerRef = React.useRef(null);
   const BATCH_SIZE = 20;
   const throttleRef = React.useRef(false);
+
+  // Thêm useEffect để xử lý window resize
+  React.useEffect(() => {
+    const getColumns = () => {
+      const width = window.innerWidth;
+      if (width < 768) return 2;
+      if (width < 1200) return 3;
+      return 5;
+    };
+
+    // Set columns lần đầu
+    setColumns(getColumns());
+
+    // Thêm event listener cho resize
+    const handleResize = () => {
+      setColumns(getColumns());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Load thêm ảnh khi scroll
   React.useEffect(() => {
@@ -82,13 +104,6 @@ const VirtualizedGallery = ({
     setPage(0);
   }, [photos]);
 
-  const getColumns = () => {
-    const width = window.innerWidth;
-    if (width < 768) return 2;
-    if (width < 1200) return 3;
-    return 5;
-  };
-
   const isLiked = (photoId) => liked.includes(photoId) || interactions[photoId]?.heart;
 
   return (
@@ -102,7 +117,7 @@ const VirtualizedGallery = ({
       }}
     >
       <StyledImageList 
-        cols={getColumns()} 
+        cols={columns} 
         gap={5}
         sx={{
           maxWidth: 'none',
