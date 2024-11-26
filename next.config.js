@@ -4,12 +4,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/static/:path*',
-        destination: 'http://localhost:5002/static/:path*'
+        source: '/api/:path*',
+        destination: 'http://localhost:5002/api/:path*'
       },
       {
-        source: '/dataclient/:path*', 
-        destination: 'http://localhost:5002/static/dataclient/:path*'
+        source: '/static/:path*',
+        destination: 'http://localhost:5002/static/:path*'
       }
     ]
   },

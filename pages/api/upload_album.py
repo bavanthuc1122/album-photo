@@ -1,3 +1,4 @@
+import shutil
 import sys
 from pathlib import Path
 from flask import Flask, request, jsonify, send_file, send_from_directory
@@ -35,6 +36,8 @@ from pathlib import Path
 load_dotenv()
 load_dotenv('.env.local')
 
+import time  # Thiếu import cho process_image()
+from flask import Response # Thiếu import cho streaming response
 
 
 
@@ -51,7 +54,8 @@ CORS(app, resources={
     r"/*": {
         "origins": ["http://localhost:3000"],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"]
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
     }
 })
 
@@ -1293,18 +1297,16 @@ if __name__ == '__main__':
 # Add static route
 @app.route('/static/<path:filename>')
 def serve_static(filename):
-    print(f"=== Debug serve_static ===")
-    print(f"Requested file: {filename}")
+    # Debug log
+    print(f"Serving static file: {filename}")
+    print(f"Full path: {os.path.join('storage', filename)}")
     
-    # Clean path
-    clean_path = filename.replace('dataclient/dataclient/', 'dataclient/')
-    full_path = LOCAL_STORAGE_PATH / clean_path
-    
-    print(f"Full path: {full_path}")
-    if full_path.exists():
-        return send_file(str(full_path))
-        
-    return "File not found", 404
+    try:
+        # Serve từ thư mục storage
+        return send_from_directory('storage', filename)
+    except Exception as e:
+        print(f"Error serving file: {str(e)}")
+        return "File not found", 404
 
 # Lấy đường dẫn tuyệt đối của project
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
