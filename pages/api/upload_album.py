@@ -293,29 +293,33 @@ def get_albums():
         albums = []
         for album_path in user_data_path.iterdir():
             if album_path.is_dir():
-                # Find first image for cover
-                cover_image = None
-                for ext in ['.jpg', '.jpeg', '.png']:
-                    images = list(album_path.glob(f'*{ext}'))
-                    if images:
-                        cover_image = images[0].name
-                        break
-                
-                album_info = {
-                    'id': album_path.name,
-                    'name': album_path.name,
-                    'path': str(album_path.relative_to(LOCAL_STORAGE_PATH)),
-                    'photoCount': len(list(album_path.glob('*.jpg'))),
-                    'coverUrl': f"/static/dataclient/user_{username}/data/{album_path.name}/{cover_image}" if cover_image else None
-                }
-                print(f"3. Album info: {album_info}")
-                albums.append(album_info)
+                try:
+                    # Sử dụng logic từ get_album_cover
+                    all_images = []
+                    for ext in ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']:
+                        all_images.extend(list(album_path.glob(f'*{ext}')))
+                    
+                    cover_url = None
+                    if all_images:
+                        cover_image = random.choice(all_images)
+                        cover_url = f"/static/dataclient/user_{username}/data/{album_path.name}/{cover_image.name}"
+                    
+                    album_info = {
+                        'id': album_path.name,
+                        'name': album_path.name,
+                        'path': str(album_path.relative_to(LOCAL_STORAGE_PATH)),
+                        'photoCount': len(all_images),
+                        'coverUrl': cover_url
+                    }
+                    albums.append(album_info)
+                except Exception as e:
+                    print(f"Error processing album {album_path}: {str(e)}")
+                    continue
         
         return jsonify(albums)
         
     except Exception as e:
         print(f"Error in get_albums: {str(e)}")
-        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/albums/<album_id>', methods=['PUT'])
@@ -1295,31 +1299,36 @@ try:
 except Exception as e:
     print("Error importing shares:", str(e))
 
-# Cấu hình logging
+# Cấu hình logging đúng cách
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('flask_app.log'),
-        logging.StreamHandler(sys.stdout)
+        logging.FileHandler('flask_app.log', encoding='utf-8'),
+        logging.StreamHandler()
     ]
 )
 logger = logging.getLogger(__name__)
 
-# Xử lý signal để tắt server gracefully
+# Sửa error handler
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # Ghi log lỗi
+    logger.exception("Unhandled exception occurred")
+    # Trả về response cho client
+    return jsonify({
+        'error': 'Internal server error',
+        'message': str(e)
+    }), 500
+
+# Sửa signal handler
 def signal_handler(sig, frame):
-    logger.info('Shutting down server...')
+    logger.info('Shutting down server gracefully...')
+    # Thoát chương trình an toàn
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
-
-# Error handling middleware
-@app.errorhandler(Exception)
-def handle_exception(e):
-    logger.error(f"Unhandled exception: {str(e)}")
-    logger.error(traceback.format_exc())
-    return jsonify({'error': 'Internal server error'}), 500
 
 if __name__ == '__main__':
     try:
@@ -1328,11 +1337,10 @@ if __name__ == '__main__':
             host='0.0.0.0',
             port=API_PORT,
             debug=True,
-            use_reloader=True,
-            threaded=True
+            use_reloader=True
         )
     except Exception as e:
-        print(f"Server error: {str(e)}")
+        logger.exception("Failed to start server")
         sys.exit(1)
 
 # Add static route

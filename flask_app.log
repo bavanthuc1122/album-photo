@@ -1714,3 +1714,558 @@ werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on 
 werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
 
 2024-11-26 19:27:09,900 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:27:09] "[35m[1mGET /static/dataclient/user_admin4/data/té/DSC_8242.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:46:59,319 - werkzeug - INFO -  * Detected change in 'K:\\New\\Nextjs\\photo-album-next\\pages\\api\\upload_album.py', reloading
+2024-11-26 19:51:39,525 - werkzeug - INFO -  * Restarting with stat
+2024-11-26 19:51:41,266 - werkzeug - WARNING -  * Debugger is active!
+2024-11-26 19:51:41,275 - werkzeug - INFO -  * Debugger PIN: 637-608-658
+2024-11-26 19:51:41,368 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "GET /api/albums?username=admin4 HTTP/1.1" 200 -
+2024-11-26 19:51:41,813 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:41,814 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:41,815 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:41,817 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:41,820 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:41,822 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:41,827 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "[35m[1mGET /static/dataclient/user_admin4/data/Khách%20VÍP/DSC_8446.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:41,829 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "[35m[1mGET /static/dataclient/user_admin4/data/Chị%20Khách%20Áo%20Đỏ/DSC_8750.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:41,832 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "[35m[1mGET /static/dataclient/user_admin4/data/Khách/NIK_6311.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:41,835 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "[35m[1mGET /static/dataclient/user_admin4/data/Adu/DSC_8343.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:41,837 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "[35m[1mGET /static/dataclient/user_admin4/data/Adu111111/NIK_7441.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:41,840 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:41] "[35m[1mGET /static/dataclient/user_admin4/data/Khách%20hường/DSC_8364.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:42,165 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:42,168 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:51:42,170 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:42] "[35m[1mGET /static/dataclient/user_admin4/data/T/NIK_7495.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:51:42,172 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:51:42] "[35m[1mGET /static/dataclient/user_admin4/data/té/DSC_8242.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:54:32,210 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-26 19:54:32,211 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-26 19:54:32,215 - werkzeug - INFO -  * Restarting with stat
+2024-11-26 19:54:34,037 - werkzeug - WARNING -  * Debugger is active!
+2024-11-26 19:54:34,046 - werkzeug - INFO -  * Debugger PIN: 637-608-658
+2024-11-26 19:55:04,315 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 854, in dispatch_request
+    self.raise_routing_exception(req)
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 463, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\routing\map.py", line 624, in match
+    raise MethodNotAllowed(valid_methods=list(e.have_match_for)) from None
+werkzeug.exceptions.MethodNotAllowed: 405 Method Not Allowed: The method is not allowed for the requested URL.
+2024-11-26 19:55:04,324 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:55:04] "GET /api/albums/Khách/photos?username=admin4&path= HTTP/1.1" 200 -
+2024-11-26 19:55:04,330 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:55:04] "[35m[1mGET /api/albums/interactions?albumId=Khách&visitorId=yQwpfr32f6UrcFNkgYylZ19U69fGlTYE HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,237 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 854, in dispatch_request
+    self.raise_routing_exception(req)
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 463, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\routing\map.py", line 624, in match
+    raise MethodNotAllowed(valid_methods=list(e.have_match_for)) from None
+werkzeug.exceptions.MethodNotAllowed: 405 Method Not Allowed: The method is not allowed for the requested URL.
+2024-11-26 19:56:34,354 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /api/albums/interactions?albumId=Khách&visitorId=yQwpfr32f6UrcFNkgYylZ19U69fGlTYE HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,370 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "GET /api/albums/Khách/photos?username=admin4&path= HTTP/1.1" 200 -
+2024-11-26 19:56:34,715 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:34,719 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6225.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,847 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:34,847 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:34,850 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:34,851 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/DSC_8369.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,855 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6372.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,859 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/DSC_8364.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,862 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:34,864 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:34,869 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6374.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:34,873 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:34] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_7441.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,045 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,048 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6392.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,189 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,191 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,194 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6293.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,194 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,197 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6296.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,202 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6311.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,207 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,213 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6322.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,226 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,232 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6332.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,360 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,364 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_6345.JPG HTTP/1.1[0m" 500 -
+2024-11-26 19:56:35,516 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 270, in <lambda>
+    view_func=lambda **kw: self_ref().send_static_file(**kw),  # type: ignore # noqa: B950
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 318, in send_static_file
+    return send_from_directory(
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\helpers.py", line 552, in send_from_directory
+    return werkzeug.utils.send_from_directory(  # type: ignore[return-value]
+  File "c:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\utils.py", line 575, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-26 19:56:35,520 - werkzeug - INFO - 127.0.0.1 - - [26/Nov/2024 19:56:35] "[35m[1mGET /static/dataclient/user_admin4/data/data/Khách/NIK_7408.JPG HTTP/1.1[0m" 500 -
+2024-11-27 00:52:35,569 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 00:52:35,660 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 00:52:49,924 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 00:52:49,924 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 00:52:49,926 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 00:52:50,499 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 00:52:50,506 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 00:55:13,090 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 00:55:13,090 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 00:55:13,094 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 00:55:14,072 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 00:55:14,084 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:08:46,089 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:08:46,090 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:08:46,093 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:08:46,815 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:08:46,823 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:15:50,342 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:15:50,438 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:16:13,321 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:16:13,322 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:16:13,323 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:16:13,830 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:16:13,838 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:20:37,975 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:20:37,975 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:20:37,977 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:20:38,494 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:20:38,502 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:27:27,825 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:27:27,825 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:27:27,827 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:27:28,314 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:27:28,321 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:29:07,045 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:29:07,045 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:29:07,047 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:29:07,562 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:29:07,570 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:29:51,798 - __main__ - ERROR - Unhandled exception occurred
+Traceback (most recent call last):
+  File "C:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 854, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\app.py", line 463, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+  File "C:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\flask\ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "C:\Users\Thuc\AppData\Local\Programs\Python\Python310\lib\site-packages\werkzeug\routing\map.py", line 629, in match
+    raise NotFound() from None
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-27 01:29:51,801 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2024 01:29:51] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2024-11-27 01:32:34,643 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:32:34,702 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:32:39,948 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:32:39,948 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:32:39,950 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:32:40,486 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:32:40,494 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:34:18,690 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:34:18,757 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:34:24,831 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:34:24,832 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:34:24,833 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:34:25,356 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:34:25,364 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:40:02,476 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:40:02,664 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:40:56,281 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:40:56,281 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:40:56,283 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:40:56,813 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:40:56,823 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:41:25,921 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:41:26,029 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:42:09,537 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:42:09,537 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:42:09,539 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:42:10,016 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:42:10,024 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:42:57,159 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:42:57,159 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:42:57,161 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:42:57,678 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:42:57,686 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:45:25,814 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:45:25,814 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:45:25,816 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:45:26,351 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:45:26,358 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:45:38,979 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:45:39,073 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:46:45,142 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:46:45,142 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:46:45,144 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:46:45,651 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:46:45,659 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:48:43,577 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:48:43,577 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:48:43,581 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:48:44,501 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:48:44,511 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:49:18,014 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:49:18,100 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:49:24,829 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.100.116:5002
+2024-11-27 01:49:24,829 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-27 01:49:24,831 - werkzeug - INFO -  * Restarting with stat
+2024-11-27 01:49:25,466 - werkzeug - WARNING -  * Debugger is active!
+2024-11-27 01:49:25,475 - werkzeug - INFO -  * Debugger PIN: 708-803-016
+2024-11-27 01:50:03,371 - __main__ - INFO - Shutting down server gracefully...
+2024-11-27 01:50:03,499 - __main__ - INFO - Shutting down server gracefully...

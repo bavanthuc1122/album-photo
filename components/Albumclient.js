@@ -25,7 +25,7 @@ import {
   ImageWrapper,
   ActionButtons,
   LightboxContainer
-} from './albumclient.styles';
+} from '../styles/albumclient.styles';
 
 const NavigationButton = styled(IconButton)({
   position: 'absolute',
@@ -110,6 +110,7 @@ const AlbumClient = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(null);
   const [interactions, setInteractions] = useState({});
   const [visitorId, setVisitorId] = useState(null);
+  const [user, setUser] = useState(null);
 
   // Derived State
   const [albumName, randomString] = useMemo(() => {
@@ -650,6 +651,12 @@ const AlbumClient = () => {
     }
   }, [visitorId, interactions, albumName]);
 
+  // Thêm useEffect để load user info
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+    setUser(userInfo);
+  }, []);
+
   // Render Methods
   const filteredPhotos = showLiked ? photos.filter(photo => liked.includes(photo.id)) : photos;
 // đã tách
@@ -672,8 +679,9 @@ const AlbumClient = () => {
     );
   };
 
-  // Thêm hàm processPhotoUrl
+  // Sửa lại hàm processPhotoUrl
   const processPhotoUrl = (photo) => {
+    if (!user?.username) return CONFIG.STORAGE.DEFAULT_COVER;
     return `${CONFIG.API_URL}/static/dataclient/user_${user.username}/data/${currentPath}/${photo.name}`;
   };
 
