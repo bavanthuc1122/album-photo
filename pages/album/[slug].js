@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { getAlbum, getAllAlbumSlugs } from '../../lib/api';
-import AlbumClient from '../../styles/Albumclient';
+import AlbumClient from '../../components/Albumclient';
 
 export default function AlbumPage({ album }) {
   const router = useRouter();

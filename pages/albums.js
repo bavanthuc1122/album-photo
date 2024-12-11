@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import PhotoGrid from '../styles/Maincontentgrid';
+import PhotoGrid from '../components/Maincontentgrid';
 
 export default function Albums() {
   const [searchQuery, setSearchQuery] = useState('');

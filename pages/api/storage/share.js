@@ -1,53 +1,37 @@
-import { getSession } from 'next-auth/react';
-import { prisma } from '../../../lib/prisma'; // Giả sử bạn dùng Prisma
+import { pool } from '../../../lib/db';
+import { generateRandomString } from '../../../lib/utils';
 
 export default async function handler(req, res) {
-  if (!['POST', 'DELETE'].includes(req.method)) {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method === 'POST') {
+    const { path, isPublic, folderId, allowedUsers } = req.body;
+    const shareId = generateRandomString(10);
+    
+    try {
+      // Get folder info first
+      const [folder] = await pool.query(
+        'SELECT * FROM folders WHERE folder_id = ?',
+        [folderId]
+      );
+
+      // Format allowed_users
+      const allowedUsers = {
+        users: [], // array of usernames
+        emails: [], // array of emails
+        accessType: 'view', // 'view' | 'download'
+        expiresAt: null // optional expiration date
+      };
+
+      // Create share record
+      await pool.query(
+        `INSERT INTO shares (shareId, username, path, isPublic, allowed_users) 
+         VALUES (?, ?, ?, ?, ?)`,
+        [shareId, req.user.username, path, isPublic, JSON.stringify(allowedUsers)]
+      );
+
+      return res.json({ success: true, shareId });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
   }
-
-  try {
-    const session = await getSession({ req });
-    if (!session) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    const { path, isPublic } = req.body;
-    const username = session.user.username;
-
-    if (req.method === 'POST') {
-      // Tạo share link
-      const shareLink = await prisma.shares.create({
-        data: {
-          username,
-          path,
-          isPublic,
-          shareId: generateShareId(), // Hàm tạo ID ngẫu nhiên
-          expiresAt: req.body.expiresAt // Tùy chọn
-        }
-      });
-
-      return res.json({ 
-        success: true, 
-        shareLink: `/shared/${shareLink.shareId}` 
-      });
-    }
-
-    if (req.method === 'DELETE') {
-      // Hủy chia sẻ
-      await prisma.shares.delete({
-        where: {
-          username_path: {
-            username,
-            path
-          }
-        }
-      });
-
-      return res.json({ success: true });
-    }
-  } catch (error) {
-    console.error('Share error:', error);
-    return res.status(500).json({ error: 'Error processing share request' });
-  }
+  // ... handle other methods
 } 

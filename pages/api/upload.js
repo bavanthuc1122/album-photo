@@ -11,7 +11,7 @@ export const config = {
   }
 };
 
-const LOCAL_STORAGE_PATH = process.env.LOCAL_STORAGE_PATH || 'storage/dataclient';
+const LOCAL_STORAGE_PATH = process.env.LOCAL_STORAGE_PATH || 'public/dataclient';
 
 const handler = async (req, res) => {
   try {
